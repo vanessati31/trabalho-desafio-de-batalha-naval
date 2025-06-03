@@ -1,0 +1,78 @@
+,,#include <stdio.h>
+#include <stdlib.h>
+
+#define TAM 5  // Tamanho do tabuleiro 5x5
+#define NAVIOS 3  // Quantidade de navios por jogador
+
+// Função para inicializar o tabuleiro com '~' (água)
+void inicializarTabuleiro(char tabuleiro[TAM][TAM]) {
+    for (int i = 0; i < TAM; i++) {
+        for (int j = 0; j < TAM; j++) {
+            tabuleiro[i][j] = '~';  // '~' representa água
+        }
+    }
+}
+
+// Função para exibir o tabuleiro na tela
+void exibirTabuleiro(char tabuleiro[TAM][TAM], int ocultarNavios) {
+    printf("  ");
+    for (int i = 0; i < TAM; i++) {
+        printf("%d ", i);
+    }
+    printf("\n");
+
+    for (int i = 0; i < TAM; i++) {
+        printf("%d ", i);
+        for (int j = 0; j < TAM; j++) {
+            if (ocultarNavios && tabuleiro[i][j] == 'N') {
+                printf("~ ");  // Oculta navios
+            } else {
+                printf("%c ", tabuleiro[i][j]);
+            }
+        }
+        printf("\n");
+    }
+}
+
+// Função para posicionar os navios
+void posicionarNavios(char tabuleiro[TAM][TAM], int jogador) {
+    int x, y;
+    printf("\nJogador %d, posicione seus %d navios (coordenadas X Y):\n", jogador, NAVIOS);
+
+    for (int i = 0; i < NAVIOS; i++) {
+        do {
+            printf("Navio %d: ", i + 1);
+            scanf("%d %d", &x, &y);
+        } while (x < 0 || x >= TAM || y < 0 || y >= TAM || tabuleiro[x][y] == 'N');
+
+        tabuleiro[x][y] = 'N';  // 'N' representa navio
+    }
+    system("clear||cls");  // Limpa a tela para esconder os navios do outro jogador
+}
+
+// Função para verificar se todos os navios foram destruídos
+int todosNaviosAfundados(char tabuleiro[TAM][TAM]) {
+    for (int i = 0; i < TAM; i++) {
+        for (int j = 0; j < TAM; j++) {
+            if (tabuleiro[i][j] == 'N') {
+                return 0;  // Ainda restam navios
+            }
+        }
+    }
+    return 1;  // Todos os navios foram destruídos
+}
+
+// Função para processar um ataque
+void realizarAtaque(char tabuleiro[TAM][TAM], int jogador) {
+    int x, y;
+    printf("\nJogador %d, digite as coordenadas para atacar: ", jogador);
+    scanf("%d %d", &x, &y);
+
+    if (x < 0 || x >= TAM || y < 0 || y >= TAM) {
+        printf("Coordenada inválida. Perdeu a vez!\n");
+        return;
+    }
+
+    if (tabuleiro[x][y] == 'N') {
+        printf("Acertou um navio!\n");
+        tabuleiro[x][y] = 'X';  // 'X' re
